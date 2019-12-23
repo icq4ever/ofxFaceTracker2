@@ -4,7 +4,7 @@
 #define DLIB_SERVER_KERNEL_CPp_
 
 #include "server_kernel.h"
-#include "dlib/string.h"
+#include "../string.h"
 
 namespace dlib
 {

@@ -6,7 +6,7 @@
 #include "edge_list_graphs_abstract.h"
 #include <limits>
 #include <vector>
-#include "dlib/string.h"
+#include "../string.h"
 #include "../rand.h"
 #include <algorithm>
 #include "sample_pair.h"
@@ -286,7 +286,7 @@ namespace dlib
         // Hold the length for the longest edge for each node.  Initially they are all infinity.
         std::vector<double> worst_dists(samples.size(), std::numeric_limits<double>::infinity());
 
-        std::vector<sample_pair>::iterator begin_i, end_i, begin_j, end_j, itr;
+        std::vector<sample_pair>::iterator begin_i, end_i, begin_j, end_j;
         begin_i = edges.begin();
         end_i = begin_i + k;
 

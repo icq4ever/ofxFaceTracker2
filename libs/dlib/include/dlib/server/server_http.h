@@ -11,7 +11,7 @@
 #include <cctype>
 #include <map>
 #include "../logger.h"
-#include "dlib/string.h"
+#include "../string.h"
 #include "server_iostream.h"
 
 #ifdef  __INTEL_COMPILER

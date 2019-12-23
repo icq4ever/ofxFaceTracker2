@@ -7,7 +7,7 @@
 #include "../rand.h"
 #include <vector>
 #include "../algs.h"
-#include "dlib/string.h"
+#include "../string.h"
 #include "../serialize.h"
 #include "../matrix/matrix_mat.h"
 #include <iostream>
@@ -67,7 +67,7 @@ namespace dlib
         const std::vector<T>& to_std_vector(
         ) const { return items; }
 
-        unsigned long size (
+        size_t size (
         ) const 
         {
             return items.size();
@@ -170,7 +170,7 @@ namespace dlib
             random_subset_selector& a
         )
         {
-            a.swap(a.items);
+            items.swap(a.items);
             std::swap(_max_size, a._max_size);
             std::swap(count, a.count);
             rnd.swap(a.rnd);

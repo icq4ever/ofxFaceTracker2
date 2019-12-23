@@ -38,7 +38,7 @@ common:
 	# any special flag that should be passed to the linker when using this
 	# addon, also used for system libraries with -lname
 	#ADDON_LDFLAGS = -Llibs/dlib/lib/ -ldlib
-	#ADDON_LDFLAGS = -ldlib
+	ADDON_LDFLAGS = -ldlib
 
 	# linux only, any library that should be included in the project using
 	# pkg-config
@@ -94,4 +94,7 @@ vs:
 	ADDON_LIBS = libs/dlib/lib/win/Release/dlib.lib
 	ADDON_CFLAGS = "/D _USE_MATH_DEFINES"
 
-
+linux64:
+	ADDON_SOURCES_EXCLUDE = libs/dlib/include/*
+	ADDON_INCLUDES_EXCLUDE = libs/dlib/include/dlib
+	ADDON_LIBS = libs/dlib/lib/linux64/libdlib.a

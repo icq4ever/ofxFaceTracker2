@@ -63,6 +63,8 @@ vector<int> ofxFaceTracker2Landmarks::getFeatureIndices(Feature feature) {
             return vector<int>(faceOutline, faceOutline + 27);
         }
         case ALL_FEATURES: return consecutive(0, 68);
+		default:
+			return vector<int>(0, 0);
     }
 }
 

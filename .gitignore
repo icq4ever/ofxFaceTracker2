@@ -10,6 +10,11 @@
 *.perspectivev3
 !default.perspectivev3
 xcuserdata
+build-* 
+.vscode/
+*.code-workspace
+*.qbs
+*.qbs.user
 
 ## Other
 *.xccheckout

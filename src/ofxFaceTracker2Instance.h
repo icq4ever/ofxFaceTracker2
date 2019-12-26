@@ -38,7 +38,7 @@ public:
     
 private:
     int label;
-    ofxFaceTracker2Landmarks landmarks;
+	ofxFaceTracker2Landmarks landmarks;
     dlib::rectangle rectangle;
     
     bool poseCalculated;

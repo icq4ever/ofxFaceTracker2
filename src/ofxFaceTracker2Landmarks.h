@@ -42,6 +42,14 @@ public:
     
     template <class T> ofMesh getMesh(std::vector<T> points) const;
     
+	// added by icq4ever
+//	glm::vec2 centerOfGravity;
+	glm::vec2 getCenterOfGravityPoint();
+	float getDistanceWithLandmarkIndex(int idx1, int idx2);
+	float getAngleWithLandmarkIndex(int from, int to);
+	float getDistanceEar2Ear();
+	float getMouthWidth();
+	float getJawAngle();
 private:
     dlib::full_object_detection shape;
     ofxFaceTracker2InputInfo & info;

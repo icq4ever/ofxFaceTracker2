@@ -59,13 +59,27 @@ vector<int> ofxFaceTracker2Landmarks::getFeatureIndices(Feature feature) {
         case NOSE_BRIDGE: return consecutive(27, 31);
         case NOSE_BASE: return consecutive(31, 36);
         case FACE_OUTLINE: {
-            static int faceOutline[] = {17,18,19,20,21,22,23,24,25,26, 16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0};
-            return vector<int>(faceOutline, faceOutline + 27);
+			static int faceOutline[] = {17,18,19,20,21,22,23,24,25,26,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0};
+//			return vector<int>(faceOutline, faceOutline + 27);
+			return vector<int>(faceOutline, faceOutline + sizeof(faceOutline)/sizeof(int));
         }
         case ALL_FEATURES: return consecutive(0, 68);
 		default:
 			return vector<int>(0, 0);
     }
+}
+
+glm::vec2 ofxFaceTracker2Landmarks::getCenterOfGravityPoint(){
+	vector<int> outlinePoints = getFeatureIndices(FACE_OUTLINE);
+//	int numOfPoints =
+	glm::vec2 total;
+	for(int i=0; i<outlinePoints.size(); i++){
+		total += getImagePoint(outlinePoints[i]);
+	}
+
+	total /= outlinePoints.size();
+	cout << ofToString(total)<< endl;
+	return total;
 }
 
 
@@ -143,3 +157,31 @@ ofMesh ofxFaceTracker2Landmarks::getMesh(vector<T> points) const {
     
 }
 
+float ofxFaceTracker2Landmarks::getDistanceWithLandmarkIndex(int idx1, int idx2){
+	ofVec2f p1(getImagePoint(idx1));
+	ofVec2f p2(getImagePoint(idx2));
+
+	return p1.distance(p2);
+}
+
+float ofxFaceTracker2Landmarks::getAngleWithLandmarkIndex(int from, int to){
+	ofVec2f p1(getImagePoint(from));
+	ofVec2f p2(getImagePoint(to));
+
+	return p1.angle(p2);
+}
+
+// added by icq4ever
+float ofxFaceTracker2Landmarks::getDistanceEar2Ear()	{ return getDistanceWithLandmarkIndex(0, 16);	}
+float ofxFaceTracker2Landmarks::getMouthWidth()			{ return getDistanceWithLandmarkIndex(48, 54);	}
+float ofxFaceTracker2Landmarks::getJawAngle()			{
+	ofVec2f p1(getImagePoint(30));
+	ofVec2f p2(getImagePoint(33));
+	ofVec2f midFace = p1.getMiddle(p2);
+
+	ofVec2f leftEye(getImagePoint(39));
+	ofVec2f rightEye(getImagePoint(42));
+	ofVec2f midEye = leftEye.getMiddle(rightEye);
+
+	return ofRadToDeg(midFace.angle(midEye))+180;
+}

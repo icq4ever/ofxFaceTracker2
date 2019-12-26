@@ -257,6 +257,34 @@ void ofxFaceTracker2::drawDebug(int x, int y, int _w, int _h) const{
     if(failed) {
         return;
     }
+
+	ofPushMatrix();
+	ofPushStyle();
+
+
+//	ofNoFill();
+//	ofSetLineWidth(4);
+
+	ofTranslate(x,y);
+
+	if(ofGetRectMode() == OF_RECTMODE_CENTER){
+		ofTranslate(-_w/2, -_h/2);
+	}
+
+	if(_w != info.inputWidth || _h != info.inputHeight){
+		ofScale((float)_w/info.inputWidth, (float)_h/info.inputHeight);
+	}
+
+	for(auto instance : getInstances()){
+//		ofDrawCircle()
+		ofSetColor(255, 255, 0);
+		ofFill();
+		ofDrawCircle(instance.getLandmarks().getCenterOfGravityPoint(), 4);
+	}
+
+	ofPopStyle();
+	ofPopMatrix();
+
     
     ofPushMatrix();
     ofPushStyle(); {
@@ -274,6 +302,7 @@ void ofxFaceTracker2::drawDebug(int x, int y, int _w, int _h) const{
         for (auto instance : getInstances()){
             ofNoFill();
             
+			// getImageFeature() => ofPolyline
             instance.getLandmarks().getImageFeature(ofxFaceTracker2Landmarks::LEFT_EYE).draw();
             instance.getLandmarks().getImageFeature(ofxFaceTracker2Landmarks::RIGHT_EYE).draw();
             instance.getLandmarks().getImageFeature(ofxFaceTracker2Landmarks::LEFT_EYEBROW).draw();

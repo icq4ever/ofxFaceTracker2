@@ -200,6 +200,20 @@ float ofxFaceTracker2Landmarks::getDegOfLeftEyeBrow(){
 	return ofAngleDifferenceDegrees(0, getAngleWithLandmarkIndex(22, 26));
 }
 float ofxFaceTracker2Landmarks::getDegOfRightEyeBrow(){
-
 	return ofAngleDifferenceDegrees(0, -getAngleWithLandmarkIndex(21, 17)-180);
+}
+
+// get eyeSize
+float ofxFaceTracker2Landmarks::getLeftEyeSize(){
+	float w = getDistanceWithLandmarkIndex(42, 45);
+	float h = getDistanceWithLandmarkIndex(43, 47);
+
+	return h/w;
+}
+
+float ofxFaceTracker2Landmarks::getRightEyeSize(){
+	float w = getDistanceWithLandmarkIndex(36, 39);
+	float h = getDistanceWithLandmarkIndex(38, 40);
+
+	return h/w;
 }

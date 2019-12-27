@@ -54,6 +54,8 @@ public:
 
 	float getDegOfLeftEyeBrow();
 	float getDegOfRightEyeBrow();
+	float getLeftEyeSize();
+	float getRightEyeSize();
 private:
     dlib::full_object_detection shape;
     ofxFaceTracker2InputInfo & info;

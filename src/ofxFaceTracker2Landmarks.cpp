@@ -69,6 +69,7 @@ vector<int> ofxFaceTracker2Landmarks::getFeatureIndices(Feature feature) {
     }
 }
 
+// get centerOfGravityPoint from faceOutline
 glm::vec2 ofxFaceTracker2Landmarks::getCenterOfGravityPoint(){
 	vector<int> outlinePoints = getFeatureIndices(FACE_OUTLINE);
 //	int numOfPoints =
@@ -78,7 +79,7 @@ glm::vec2 ofxFaceTracker2Landmarks::getCenterOfGravityPoint(){
 	}
 
 	total /= outlinePoints.size();
-	cout << ofToString(total)<< endl;
+//	cout << ofToString(total)<< endl;
 	return total;
 }
 
@@ -165,13 +166,20 @@ float ofxFaceTracker2Landmarks::getDistanceWithLandmarkIndex(int idx1, int idx2)
 }
 
 float ofxFaceTracker2Landmarks::getAngleWithLandmarkIndex(int from, int to){
+	ofVec2f ps;
+	ps.set(1, 0);
 	ofVec2f p1(getImagePoint(from));
 	ofVec2f p2(getImagePoint(to));
 
-	return p1.angle(p2);
+//	return p1.angle(p2);
+	return -ps.angle(p2-p1);
 }
 
 // added by icq4ever
+float ofxFaceTracker2Landmarks::getAngleOfNoseStem(){
+	return(getAngleWithLandmarkIndex(30, 27));
+}
+
 float ofxFaceTracker2Landmarks::getDistanceEar2Ear()	{ return getDistanceWithLandmarkIndex(0, 16);	}
 float ofxFaceTracker2Landmarks::getMouthWidth()			{ return getDistanceWithLandmarkIndex(48, 54);	}
 float ofxFaceTracker2Landmarks::getJawAngle()			{
@@ -184,4 +192,14 @@ float ofxFaceTracker2Landmarks::getJawAngle()			{
 	ofVec2f midEye = leftEye.getMiddle(rightEye);
 
 	return ofRadToDeg(midFace.angle(midEye))+180;
+}
+
+
+// clamp angle
+float ofxFaceTracker2Landmarks::getDegOfLeftEyeBrow(){
+	return ofAngleDifferenceDegrees(0, getAngleWithLandmarkIndex(22, 26));
+}
+float ofxFaceTracker2Landmarks::getDegOfRightEyeBrow(){
+
+	return ofAngleDifferenceDegrees(0, -getAngleWithLandmarkIndex(21, 17)-180);
 }

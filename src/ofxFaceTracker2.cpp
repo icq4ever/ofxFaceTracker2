@@ -59,7 +59,8 @@ void ofxFaceTracker2::setup(string dataPath) {
 	}
     
     // Setup tracker keeping persistent id's of rectangles
-    faceRectanglesTracker.setMaximumDistance(200);
+	faceRectanglesTracker.setMaximumDistance(200);
+
 }
 
 // ----------------
@@ -197,7 +198,7 @@ void ofxFaceTracker2::runFaceDetector(bool lockMutex){
     
     if(lockMutex) mutex.lock();
     
-    vector<cv::Rect> rects;
+	std::vector<cv::Rect> rects;
     // Store face detector data
     float s = 1.0f/scale;
     for(auto rect : detectedFaceRectangles){
@@ -239,10 +240,10 @@ void ofxFaceTracker2::runLandmarkDetector(){
 }
 
 
-const vector<ofxFaceTracker2Instance> & ofxFaceTracker2::getInstances() const{
+const std::vector<ofxFaceTracker2Instance> & ofxFaceTracker2::getInstances() const{
     return instances;
 }
-vector<ofxFaceTracker2Instance> & ofxFaceTracker2::getInstances(){
+std::vector<ofxFaceTracker2Instance> & ofxFaceTracker2::getInstances(){
     return instances;
 }
 

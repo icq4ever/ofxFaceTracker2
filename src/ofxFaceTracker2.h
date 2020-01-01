@@ -14,8 +14,10 @@
 #include <dlib/image_processing.h>
 #include <dlib/serialize.h>
 #include <dlib/opencv.h>
+//#include <dlib/svm.h>
 
 #include "ofxFaceTracker2Instance.h"
+#include "ofxFaceTracker2EmotionRecognitionOVO.h"
 
 #define MAX_FACES 20
 
@@ -113,6 +115,8 @@ protected:
     ofxFaceTracker2InputInfo info;
 
 	cv::Rect roi;
+
+	ofxFaceTracker2EmotionRecognitionOVO emotionTracker;
 };
 
 

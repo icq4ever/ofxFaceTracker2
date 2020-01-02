@@ -4,9 +4,6 @@ using namespace std;
 ofxFaceTracker2Landmarks::ofxFaceTracker2Landmarks(dlib::full_object_detection shape, ofxFaceTracker2InputInfo & info) : shape(shape), info(info){
 }
 
-
-
-
 glm::vec2 ofxFaceTracker2Landmarks::getImagePoint(int i) const {
     glm::vec4 p = glm::vec4(shape.part(i).x(), shape.part(i).y(), 0.f, 1.f);
     p = info.rotationMatrix * p;
@@ -25,7 +22,7 @@ vector<glm::vec2> ofxFaceTracker2Landmarks::getImagePoints() const {
 
 vector<cv::Point2f> ofxFaceTracker2Landmarks::getCvImagePoints() const {
     int n = shape.num_parts();
-    vector<cv::Point2f> imagePoints(n);
+	vector<cv::Point2f> imagePoints(n);
     for(int i = 0; i < n; i++) {
         imagePoints[i] = ofxCv::toCv(getImagePoint(i));
     }
@@ -217,3 +214,7 @@ float ofxFaceTracker2Landmarks::getRightEyeSize(){
 
 	return h/w;
 }
+
+//void ofxFaceTracker2Landmarks::getEmotion(){
+//	ed.getEmotion(shape);
+//}

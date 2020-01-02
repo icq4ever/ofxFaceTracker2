@@ -1,20 +1,75 @@
 #include "ofxFaceTracker2EmotionRecognitionOVO.h"
 
 ofxFaceTracker2EmotionRecognitionOVO::ofxFaceTracker2EmotionRecognitionOVO(){
-	vector<sample_type> samples;
-	deserialize(shapeFileName) >> sp;
-	deserialize(emotionFileName1) >> ep1;
-	deserialize(emotionFileName2) >> ep2;
-	deserialize(emotionFileName3) >> ep3;
-	deserialize(emotionFileName4) >> ep4;
-	deserialize(emotionFileName5) >> ep5;
-	deserialize(emotionFileName6) >> ep6;
+	std::vector<sample_type> samples;
+
+	dlib::deserialize(ofFile(shapeFileName).path()) >> sp;
+	dlib::deserialize(ofFile(emotionFileName1).path()) >> ep1;
+	dlib::deserialize(ofFile(emotionFileName2).path()) >> ep2;
+	dlib::deserialize(ofFile(emotionFileName3).path()) >> ep3;
+	dlib::deserialize(ofFile(emotionFileName4).path()) >> ep4;
+	dlib::deserialize(ofFile(emotionFileName5).path()) >> ep5;
+	dlib::deserialize(ofFile(emotionFileName6).path()) >> ep6;
 }
 
 ofxFaceTracker2EmotionRecognitionOVO::~ofxFaceTracker2EmotionRecognitionOVO(){
 
 }
 
+void ofxFaceTracker2EmotionRecognitionOVO::getEmotionFromImage(dlib::cv_image<unsigned char> image){
+	dlib::frontal_face_detector detector = dlib::get_frontal_face_detector();
+	sample_type sample;
+//	std::vector<sample_type>samples;
+
+	dlib::array2d<dlib::rgb_pixel> img;
+
+	dlib::assign_image(img, dlib::cv_image<unsigned char>(image));
+
+	std::vector<dlib::rectangle> faceRectangles = detector(img);
+	std::vector<dlib::full_object_detection> facialFeatures;
+	dlib::full_object_detection feature = sp(img, faceRectangles[0]);
+
+	int l = 0;
+	for(int j = 0; j < 68; j++){
+		for(int k = 0; k < j; k++,l++){
+			sample(l) = length(feature.part(j),feature.part(k));
+			l++;
+			sample(l) = slope(feature.part(j),feature.part(k));
+		}
+	}
+//	samples.push_back(sample);
+
+//	for(int i=0; i<samples.size(); i++){
+
+		std::vector<double> prob;
+		prob = svmMulticlass(sample);
+		prob = probablityCalculator(prob);
+
+		// get maximum probabiliry index from vector "prob"
+		std::vector<double>::iterator result;
+		result = std::max_element(prob.begin(), prob.end());
+		int idx = std::distance(prob.begin(), result);
+
+
+		switch(idx){
+		case 0:
+			std::cout <<"face is nutural" << std::endl;
+			break;
+		case 1 :
+			std::cout << "face is happy" << std::endl;
+			break;
+		case 2:
+			std::cout << "face is sad" << std::endl;
+			break;
+		case 3:
+			std::cout << "face is surprise" << std::endl;
+			break;
+		default:
+			std::cout << "unknown" << std::endl;
+			break;
+		}
+//	}
+}
 
 std::vector<double> ofxFaceTracker2EmotionRecognitionOVO::svmMulticlass(sample_type sample)
 {
@@ -30,29 +85,61 @@ std::vector<double> ofxFaceTracker2EmotionRecognitionOVO::svmMulticlass(sample_t
 }
 
 void ofxFaceTracker2EmotionRecognitionOVO::getEmotion(dlib::full_object_detection shape){
+//void ofxFaceTracker2EmotionRecognitionOVO::getEmotion(dlib::full_object_detection shape, dlib::rectangle rect){
 //	samples = getAllAttributes(shape);
 
+
+//	std::vector<sample_type> samples;
 	sample_type sample;
 
 	int l = 0;
 	for(int j = 0; j < 68; j++){
-		for(int k = 0; k < j; k++,l++)
-		{
+		for(int k = 0; k < j; k++,l++){
+//			sample(l) = length(shape.part(j),shape.part(k));
+//			l++;
+//			sample(l) = slope(shape.part(j),shape.part(k));
 			sample(l) = length(shape.part(j),shape.part(k));
 			l++;
-			sample(l) = slope(shape.part(j),shape.part(k));
-
+			sample(l) = slope(shape.part(j), shape.part(k));
 		}
 	}
 //	samples.push_back(sample);
-
-	dlib::vector<double> prob;
+	std::cout << "l : " << l << std::endl;
+	std::vector<double> prob;
 	prob = svmMulticlass(sample);
 	prob = probablityCalculator(prob);
-	cout << "probablity that face is Neutral  :" << prob[0] << endl;
-	cout << "probablity that face is Happy    :" << prob[1] << endl;
-	cout << "probablity that face is Sad      :" << prob[2] << endl;
-	cout << "probablity that face is Surprise :" << prob[3] << "\n\n\n";
+
+	// get maximum probabiliry index from vector "prob"
+	std::vector<double>::iterator result;
+	result = std::max_element(prob.begin(), prob.end());
+	int idx = result - prob.begin();
+//	int idx = std::distance(prob.begin(), result);
+
+
+	switch(idx){
+	case 0:
+		std::cout <<"face is nutural" << std::endl;
+		break;
+	case 1 :
+		std::cout << "face is happy" << std::endl;
+		break;
+	case 2:
+		std::cout << "face is sad" << std::endl;
+		break;
+	case 3:
+		std::cout << "face is surprise" << std::endl;
+		break;
+	default:
+		std::cout << "unknown" << std::endl;
+		break;
+	}
+
+//	std::max_element(prob, prob + 4) - prob;
+	/*
+	std::cout << "probablity that face is Neutral  :" << prob[0] << std::endl;
+	std::cout << "probablity that face is Happy    :" << prob[1] << std::endl;
+	std::cout << "probablity that face is Sad      :" << prob[2] << std::endl;
+	std::cout << "probablity that face is Surprise :" << prob[3] << "\n\n\n"*/;
 }
 
 double ofxFaceTracker2EmotionRecognitionOVO::length(dlib::point a, dlib::point b){
@@ -84,7 +171,7 @@ double ofxFaceTracker2EmotionRecognitionOVO::slope (dlib::point a, dlib::point b
 		return atan(double(y1-y2))/(x1-x2);
 }
 
-std::vector<double> ofxFaceTracker2EmotionRecognitionOVO::probablityCalculator(vector<double> P){
+std::vector<double> ofxFaceTracker2EmotionRecognitionOVO::probablityCalculator(std::vector<double> P){
 	std::vector<double> EmoProb(4);
 	float e[4],temp;
 

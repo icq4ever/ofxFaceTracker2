@@ -155,7 +155,7 @@ void ofxFaceTracker2::threadedFunction(){
             
             // Calculate thread fps
             clock_t end = clock() ;
-            double elapsed_time = (end-start)/(double)CLOCKS_PER_SEC ;
+			double elapsed_time = (end-start)/(double)CLOCKS_PER_SEC ;
             thread_fps = 1.0/elapsed_time;
         }
         //yield();
@@ -229,7 +229,12 @@ void ofxFaceTracker2::runLandmarkDetector(){
             auto rect = dlib::rectangle(cvrect.x, cvrect.y, cvrect.x + cvrect.width, cvrect.y + cvrect.height);
             
             // Do the actual landmark detection
-            dlib::full_object_detection shape = landmarkDetector(dlibimg, rect);
+			dlib::full_object_detection shape = landmarkDetector(dlibimg, rect);
+//			cout << shape.get_rect().left() << "\t" << shape.get_rect().tl_corner().x()<< endl;
+
+			// call emotionDetect from here
+			emotionDetector.getEmotionFromImage(dlibimg);
+//			emotionDetector.getEmotion(shape);
 
             instances.push_back(ofxFaceTracker2Instance(label, shape, rect, info));
         }

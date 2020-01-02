@@ -5,6 +5,7 @@
 #include "ofxCv.h"
 
 #include "ofxFaceTracker2InputInfo.h"
+//#include "ofxFaceTracker2EmotionRecognitionOVO.h"
 
 #include <dlib/image_processing.h>
 
@@ -56,6 +57,8 @@ public:
 	float getDegOfRightEyeBrow();
 	float getLeftEyeSize();
 	float getRightEyeSize();
+
+//	void getEmotion();
 private:
     dlib::full_object_detection shape;
     ofxFaceTracker2InputInfo & info;
@@ -65,5 +68,6 @@ private:
     
     template <class T>
     ofPolyline getFeature(Feature feature,  std::vector<T> points) const;
-    
+
+//	ofxFaceTracker2EmotionRecognitionOVO ed;
 };

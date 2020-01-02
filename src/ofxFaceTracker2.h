@@ -19,6 +19,7 @@
 #include "ofxFaceTracker2Instance.h"
 #include "ofxFaceTracker2EmotionRecognitionOVO.h"
 
+
 #define MAX_FACES 20
 
 class ofxFaceTracker2 : public ofThread {
@@ -73,7 +74,9 @@ public:
     void setThreaded(bool threaded);
     
     const std::vector<ofxFaceTracker2Instance> & getInstances() const;
-    std::vector<ofxFaceTracker2Instance> & getInstances();
+	std::vector<ofxFaceTracker2Instance> & getInstances();
+
+
     
 protected:
     std::vector<ofxFaceTracker2Instance> instances;
@@ -116,7 +119,7 @@ protected:
 
 	cv::Rect roi;
 
-	ofxFaceTracker2EmotionRecognitionOVO emotionTracker;
+	ofxFaceTracker2EmotionRecognitionOVO emotionDetector;
 };
 
 
